@@ -27,12 +27,14 @@ class Transaction {
   }
 
   commit() {
-    if (!this.isAllowed()) return false;
-    // Keep track of the time of the transaction
-    this.time = new Date();
-    // Add the transaction to the account
-    this.account.addTransaction(this);
-    return true;
+    if (this.account.balance + this.value <= 0) {
+      console.log("Insufficient funds - please see a cashier.");
+    } else {
+      // Keep track of the time of the transaction
+      this.time = new Date();
+      // Add the transaction to the account
+      this.account.addTransaction(this);
+    }
   }
 };
 
@@ -40,19 +42,11 @@ class Deposit extends Transaction {
   get value() {
     return this.amount;
   }
-
-  isAllowed() {
-    return true;
-  }
 };
 
 class Withdrawal extends Transaction {
   get value() {
     return -this.amount;
-  }
-  // where is isAllowed defined??
-  isAllowed() {
-    return (this.account.balance - this.amount >= 0);
   }
 };
 
